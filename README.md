@@ -9,7 +9,7 @@ This project involves implementing a sprint mechanic, but it currently lacks inp
 
 From this you will learn about input context mapping, function binding in C++ and some basic C++ logic. You can also see i have added a common style gate way mini game for you to play about with the mechanic you are making and could expand upon it.
 
-## Where yo find the relevant scripts
+## Where to find the relevant scripts
 
 We have two key components you need to place for this, input management components and the C++ scripts for the character. 
 
@@ -46,7 +46,7 @@ UE_LOG(LogTemp, Warning, TEXT("Sprinting"));
 ```
 For the medium and hard challenges look in the FT_SprintCharacter Constructor (`AFT_SprintCharacter::AFT_SprintCharacter()`), notice the template shows us how to change key values.
 
-## Changes from me:
+## Changes from base project:
 
 ### FT_SprintCharacter.h
 
@@ -94,11 +94,22 @@ void AFT_SprintCharacter::SprintStop(const FInputActionValue& Value)
 ```
 
 ## Challenges
+Test your might
 
+## Easy
 
 - Experiment with different input types, such as toggle and hold.
 - Connect Xbox controllers for testing; PS controllers can work but are not natively supported.
-- Develop gameplay iterations for the sprint mechanic:
-  - Easy: Limit sprint duration with stamina, including actions like jumping.
-  - Medium: Introduce acceleration and deceleration for variable speed.
-  - Hard: Adjust speed to influence the player’s turning radius.
+- Add a stamina limit considering actions like sprinting and jumping, not too advanced can charge/ deplete in the Tick method.
+
+## Medium
+- Introduce accelleration and de-acceleration, so the character takes time to get up to speed and slow down, when sprint ends.
+- Add delays to stamina recharging, see the gate code.
+- Try to improve the feedback of the gates as currently they are only debuging.
+
+## Hard 
+- Introduce finer elements of gameplay iteration, such as effecting the players turning radius during sprint, see Spyro the Dragon charging.
+- Add in an exhaustion mechanic, that adds a longer delay to stamina recharge, or slows the recharge.
+
+# Reference
+Content is made by Connah Kendrick (Connah.Kendrick@mmu.ac.uk) using the Unreal Engine 3rd Person Template for the MMU 1st year Game Mechanics Module taught to both Game Development and Game Design Students. 
