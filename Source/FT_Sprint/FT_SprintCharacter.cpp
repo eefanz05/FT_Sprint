@@ -43,6 +43,7 @@ AFT_SprintCharacter::AFT_SprintCharacter()
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
+	
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -102,6 +103,46 @@ void AFT_SprintCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	}
 }
 
+void AFT_SprintCharacter::Tick(float deltaTime)
+{
+	Super::Tick(deltaTime);
+	if (isSprint) 
+	{
+		CurrentStamina--;
+		UE_LOG(LogTemp, Log, TEXT("Losing Stamina"));
+
+
+	}
+	if(CurrentStamina<=0)
+	{
+	
+		isSprint =false;
+		UE_LOG(LogTemp, Log, TEXT("Out OF Stamina"));
+	
+	}
+	if (!isSprint && CurrentStamina<=maxStamina)
+	{
+		CurrentStamina+=0.2;
+		UE_LOG(LogTemp, Log, TEXT("Gaining Stamina"));
+
+
+	}
+	if (CurrentStamina == 100) 
+	{
+		UE_LOG(LogTemp, Log, TEXT("CanSprintAgain"));
+	}
+	if (!isSprint && shouldbeSprinting)
+	{
+
+		// Reset the speeds
+		GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed / 2;
+		GetCharacterMovement()->MinAnalogWalkSpeed = GetCharacterMovement()->MinAnalogWalkSpeed / 3;
+		shouldbeSprinting = false;
+	}
+
+
+}
+
 void AFT_SprintCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
@@ -141,15 +182,24 @@ void AFT_SprintCharacter::Look(const FInputActionValue& Value)
 /** Connah methods implementation */
 void AFT_SprintCharacter::SprintStart(const FInputActionValue& Value)
 {
-	// we could set speeds, but i like scalers 
-	GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed * 2;
-	// make it so they have a speed up route
-	GetCharacterMovement()->MinAnalogWalkSpeed = GetCharacterMovement()->MinAnalogWalkSpeed * 3;
+	if (CurrentStamina > 100) {
+		// we could set speeds, but i like scalers 
+		GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed * 2;
+		// make it so they have a speed up route
+		GetCharacterMovement()->MinAnalogWalkSpeed = GetCharacterMovement()->MinAnalogWalkSpeed * 3;
+		isSprint = true;
+		shouldbeSprinting = true;
+	}
 }
 
 void AFT_SprintCharacter::SprintStop(const FInputActionValue& Value)
 {
-	// Reset the speeds
-	GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed / 2;
-	GetCharacterMovement()->MinAnalogWalkSpeed = GetCharacterMovement()->MinAnalogWalkSpeed / 3;
+	if (!isSprint && shouldbeSprinting)
+	{
+
+		// Reset the speeds
+		GetCharacterMovement()->MaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed / 2;
+		GetCharacterMovement()->MinAnalogWalkSpeed = GetCharacterMovement()->MinAnalogWalkSpeed / 3;
+		shouldbeSprinting = false;
+	}
 }

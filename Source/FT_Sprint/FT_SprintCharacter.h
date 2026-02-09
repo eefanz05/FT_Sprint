@@ -48,11 +48,21 @@ class AFT_SprintCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* SprintAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stamina, meta = (AllowPrivateAccess = "true"))
+	float maxStamina ;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Stamina, meta = (AllowPrivateAccess = "true"))
+	float CurrentStamina;
+
+	bool isSprint, shouldbeSprinting;
+
 public:
 	AFT_SprintCharacter();
 	
 
 protected:
+
+	void Tick(float deltaTime);
+
 
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
